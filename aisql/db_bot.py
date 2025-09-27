@@ -75,7 +75,11 @@ questions = [
     "Which musicians are playing in all of the concerts?",
     "Which musicians play more than one instrument?",
     "What is the total duration of all songs in the earliest concert?",
-    "Where is the Holiday Gala being held?"
+    "Where is the Holiday Gala being held?",
+    "What concerts are scheduled in the fall?",
+    "Who is the conductor for the Fall Symphony Concert?",
+    "List all instruments owned by the orchestra.",
+    "Which musicians are playing in the concert held at 100 Main St?",
 ]
 
 def sanitizeForJustSql(value):
