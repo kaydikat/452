@@ -1,48 +1,73 @@
-create table person (
-    person_id integer primary key,
-    name varchar(20) not null
+CREATE TABLE person (
+    person_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL
 );
 
-create table phone (
-    phone_id integer primary key,
-    person_id integer not null,
-    area_code int not null,
-    number int not null,
-    can_recieve_sms tinyint not null,
-    foreign key (person_id) references person (person_id)
+CREATE TABLE musician (
+    person_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+    position VARCHAR(50),
+    FOREIGN KEY (person_id) REFERENCES person(person_id)
 );
 
-create table address (
-    address_id integer primary key,
-    person_id integer not null,
-    street varchar(50),
-    zip integer not null
+CREATE TABLE conductor (
+    person_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+    affiliation VARCHAR(100),
+    FOREIGN KEY (person_id) REFERENCES person(person_id)
 );
 
-create table zip (
-    zip integer primary key,
-    city varchar(35),
-    state_two_letter_code char(2)
+CREATE TABLE instrument (
+    instrument_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    family VARCHAR(50) NOT NULL,
+    owned_by_orchestra BOOLEAN NOT NULL
 );
 
-create table dog (
-    dog_id integer primary key,
-    name varchar(35),
-    breed varchar(35),
-    birth_date date
+CREATE TABLE instrument_musician (
+    instrument_id BIGINT UNSIGNED NOT NULL,
+    musician_id BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY (instrument_id, musician_id),
+    FOREIGN KEY (instrument_id) REFERENCES instrument(instrument_id),
+    FOREIGN KEY (musician_id) REFERENCES musician(person_id)
 );
 
-create table award (
-    award_id integer primary key,
-    dog_id integer not null,
-    event_date date,
-    award_name varchar(25) not null,
-    foreign key (dog_id) references dog (dog_id)
+CREATE TABLE concert_musician (
+    concert_id BIGINT UNSIGNED NOT NULL,
+    musician_id BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY (concert_id, musician_id),
+    FOREIGN KEY (concert_id) REFERENCES concert(concert_id),
+    FOREIGN KEY (musician_id) REFERENCES musician(person_id)
 );
 
-create table person_dog (
-    dog_id integer,
-    person_id integer,
-    foreign key (dog_id) references dog (dog_id),
-    foreign key (person_id) references person (person_id)
+CREATE TABLE address (
+    address_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    street VARCHAR(255) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    state CHAR(2) NOT NULL,
+    zip VARCHAR(10) NOT NULL
+);
+
+CREATE TABLE concert (
+    concert_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    date DATETIME NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    address_id BIGINT UNSIGNED NOT NULL,
+    conductor_id BIGINT UNSIGNED NOT NULL,
+    FOREIGN KEY (address_id) REFERENCES address(address_id),
+    FOREIGN KEY (conductor_id) REFERENCES conductor(person_id)
+);
+
+CREATE TABLE song (
+    song_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    composer VARCHAR(255) NOT NULL,
+    duration_in_minutes INT NOT NULL
+);
+
+CREATE TABLE song_concert (
+    concert_id BIGINT UNSIGNED NOT NULL,
+    song_id BIGINT UNSIGNED NOT NULL,
+    PRIMARY KEY (concert_id, song_id),
+    FOREIGN KEY (concert_id) REFERENCES concert(concert_id),
+    FOREIGN KEY (song_id) REFERENCES song(song_id)
 );
