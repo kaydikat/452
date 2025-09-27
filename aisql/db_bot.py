@@ -66,21 +66,16 @@ commonSqlOnlyRequest = " Give me a sqlite select statement that answers the ques
 strategies = {
     "zero_shot": setupSqlScript + commonSqlOnlyRequest,
     "single_domain_double_shot": (setupSqlScript +
-                   " Who doesn't have a way for us to text them? " +
-                   " \nSELECT p.person_id, p.name\nFROM person p\nLEFT JOIN phone ph ON p.person_id = ph.person_id AND ph.can_recieve_sms = 1\nWHERE ph.phone_id IS NULL;\n " +
+                   " Which songs are being performed at the 'Fall Symphony Concert'? " +
+                   " \nSELECT s.title, s.composer\nFROM song s\nJOIN song_concert sc ON s.song_id = sc.song_id\nJOIN concert c ON sc.concert_id = c.concert_id\nWHERE c.title = 'Fall Symphony Concert';\n " +
                    commonSqlOnlyRequest)
 }
 
 questions = [
-    "Which are the most awarded dogs?",
-    # "Which dogs have multiple owners?",
-    # "Which people have multiple dogs?",
-    # "What are the top 3 cities represented?",
-    # "What are the names and cities of the dogs who have awards?",
-    # "Who has more than one phone number?",
-    "Who doesn't have a way for us to text them?",
-    "Will we have a problem texting any of the previous award winners?"
-    # "I need insert sql into my tables can you provide good unique data?"
+    "Which musicians are playing in all of the concerts?",
+    "Which musicians play more than one instrument?",
+    "What is the total duration of all songs in the earliest concert?"
+    "Where is the Holiday Gala being held?"
 ]
 
 def sanitizeForJustSql(value):
@@ -113,9 +108,9 @@ for strategy in strategies:
             queryRawResponse = str(runSql(sqlSyntaxResponse))
             print("Query Raw Response:")
             print(queryRawResponse)
-            friendlyResultsPrompt = "I asked a question \"" + question +"\" and the response was \""+queryRawResponse+"\" Please, just give a concise response in a more friendly way? Please do not give any other suggests or chatter."
-            # betterFriendlyResultsPrompt = "I asked a question: \"" + question +"\" and I queried this database " + setupSqlScript + " with this query " + sqlSyntaxResponse + ". The query returned the results data: \""+queryRawResponse+"\". Could you concisely answer my question using the results data?"
-            friendlyResponse = getChatGptResponse(friendlyResultsPrompt)
+            # friendlyResultsPrompt = "I asked a question \"" + question +"\" and the response was \""+queryRawResponse+"\" Please, just give a concise response in a more friendly way? Please do not give any other suggests or chatter."
+            betterFriendlyResultsPrompt = "I asked a question: \"" + question +"\" and I queried this database " + setupSqlScript + " with this query " + sqlSyntaxResponse + ". The query returned the results data: \""+queryRawResponse+"\". Could you concisely answer my question using the results data?"
+            friendlyResponse = getChatGptResponse(betterFriendlyResultsPrompt)
             print("Friendly Response:")
             print(friendlyResponse)
         except Exception as err:
