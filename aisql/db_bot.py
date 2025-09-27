@@ -74,7 +74,7 @@ strategies = {
 questions = [
     "Which musicians are playing in all of the concerts?",
     "Which musicians play more than one instrument?",
-    "What is the total duration of all songs in the earliest concert?"
+    "What is the total duration of all songs in the earliest concert?",
     "Where is the Holiday Gala being held?"
 ]
 
